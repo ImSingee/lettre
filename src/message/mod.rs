@@ -267,13 +267,13 @@ impl MessageBuilder {
         self.header(header::Date::new(st))
     }
 
-    /// Set `Date` header using current date/time
-    ///
-    /// Shortcut for `self.date(SystemTime::now())`, it is automatically inserted
-    /// if no date has been provided.
-    pub fn date_now(self) -> Self {
-        self.date(SystemTime::now())
-    }
+    // /// Set `Date` header using current date/time
+    // ///
+    // /// Shortcut for `self.date(SystemTime::now())`, it is automatically inserted
+    // /// if no date has been provided.
+    // pub fn date_now(self) -> Self {
+    //     self.date(SystemTime::now())
+    // }
 
     /// Set `Subject` header to message
     ///
@@ -399,11 +399,12 @@ impl MessageBuilder {
         // https://tools.ietf.org/html/rfc5322#section-3.6
 
         // Insert Date if missing
-        let mut res = if self.headers.get::<header::Date>().is_none() {
-            self.date_now()
-        } else {
-            self
-        };
+        // let mut res = if self.headers.get::<header::Date>().is_none() {
+        //     self.date_now()
+        // } else {
+        //     self
+        // };
+        let mut res = self;
 
         // Fail is missing correct originator (Sender or From)
         match res.headers.get::<header::From>() {

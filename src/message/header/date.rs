@@ -17,12 +17,12 @@ impl Date {
         Self(st.into())
     }
 
-    /// Get the current date
-    ///
-    /// Shortcut for `Date::new(SystemTime::now())`
-    pub fn now() -> Self {
-        Self::new(SystemTime::now())
-    }
+    // /// Get the current date
+    // ///
+    // /// Shortcut for `Date::new(SystemTime::now())`
+    // pub fn now() -> Self {
+    //     Self::new(SystemTime::now())
+    // }
 }
 
 impl Header for Date {
