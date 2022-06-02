@@ -305,6 +305,10 @@ impl HeaderValue {
             encoded_value,
         }
     }
+
+    pub fn encoded_value(&self) -> &str {
+        return &self.encoded_value;
+    }
 }
 
 const ENCODING_START_PREFIX: &str = "=?utf-8?b?";
@@ -644,9 +648,9 @@ mod tests {
         assert_eq!(
             headers.to_string(),
             concat!(
-                "To: Ascii <example@example.com>, John Doe <johndoe@example.com, John Smith \r\n",
-                " <johnsmith@example.com>, Pinco Pallino <pincopallino@example.com>, Jemand \r\n",
-                " <jemand@example.com>, Jean Dupont <jean@example.com>\r\n"
+            "To: Ascii <example@example.com>, John Doe <johndoe@example.com, John Smith \r\n",
+            " <johnsmith@example.com>, Pinco Pallino <pincopallino@example.com>, Jemand \r\n",
+            " <jemand@example.com>, Jean Dupont <jean@example.com>\r\n"
             )
         );
     }
@@ -656,15 +660,15 @@ mod tests {
         let mut headers = Headers::new();
         headers.insert_raw(HeaderValue::new(
             HeaderName::new_from_ascii_str("Subject"),
-            "Hello! This is lettre, and this IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I guess that's it!".to_string()
+            "Hello! This is lettre, and this IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I guess that's it!".to_string(),
         ));
 
         assert_eq!(
             headers.to_string(),
             concat!(
-                "Subject: Hello! This is lettre, and this \r\n ",
-                "IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I \r\n",
-                " guess that's it!\r\n"
+            "Subject: Hello! This is lettre, and this \r\n ",
+            "IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I \r\n",
+            " guess that's it!\r\n"
             )
         );
     }
@@ -674,15 +678,15 @@ mod tests {
         let mut headers = Headers::new();
         headers.insert_raw(
             HeaderValue::new(
-            HeaderName::new_from_ascii_str("Subject"),
-            "Hello! IGuessTheLastLineWasntLongEnoughSoLetsTryAgainShallWeWhatDoYouThinkItsGoingToHappenIGuessWereAboutToFindOut! I don't know".to_string()
-        ));
+                HeaderName::new_from_ascii_str("Subject"),
+                "Hello! IGuessTheLastLineWasntLongEnoughSoLetsTryAgainShallWeWhatDoYouThinkItsGoingToHappenIGuessWereAboutToFindOut! I don't know".to_string(),
+            ));
 
         assert_eq!(
             headers.to_string(),
             concat!(
-                "Subject: Hello! IGuessTheLastLineWasntLongEnoughSoLetsTryAgainShallWeWhatDoY\r\n",
-                " ouThinkItsGoingToHappenIGuessWereAboutToFindOut! I don't know\r\n",
+            "Subject: Hello! IGuessTheLastLineWasntLongEnoughSoLetsTryAgainShallWeWhatDoY\r\n",
+            " ouThinkItsGoingToHappenIGuessWereAboutToFindOut! I don't know\r\n",
             )
         );
     }
@@ -692,15 +696,15 @@ mod tests {
         let mut headers = Headers::new();
         headers.insert_raw(HeaderValue::new(
             HeaderName::new_from_ascii_str("Subject"),
-            "1abcdefghijklmnopqrstuvwxyz2abcdefghijklmnopqrstuvwxyz3abcdefghijklmnopqrstuvwxyz4abcdefghijklmnopqrstuvwxyz5abcdefghijklmnopqrstuvwxyz6abcdefghijklmnopqrstuvwxyz".to_string()
+            "1abcdefghijklmnopqrstuvwxyz2abcdefghijklmnopqrstuvwxyz3abcdefghijklmnopqrstuvwxyz4abcdefghijklmnopqrstuvwxyz5abcdefghijklmnopqrstuvwxyz6abcdefghijklmnopqrstuvwxyz".to_string(),
         ));
 
         assert_eq!(
             headers.to_string(),
             concat!(
-                "Subject: 1abcdefghijklmnopqrstuvwxyz2abcdefghijklmnopqrstuvwxyz3abcdefghijkl\r\n",
-                " mnopqrstuvwxyz4abcdefghijklmnopqrstuvwxyz5abcdefghijklmnopqrstuvwxyz6abcdef\r\n",
-                " ghijklmnopqrstuvwxyz\r\n",
+            "Subject: 1abcdefghijklmnopqrstuvwxyz2abcdefghijklmnopqrstuvwxyz3abcdefghijkl\r\n",
+            " mnopqrstuvwxyz4abcdefghijklmnopqrstuvwxyz5abcdefghijklmnopqrstuvwxyz6abcdef\r\n",
+            " ghijklmnopqrstuvwxyz\r\n",
             )
         );
     }
@@ -739,16 +743,16 @@ mod tests {
         headers.insert_raw(HeaderValue::new(
             HeaderName::new_from_ascii_str("To"),
             "🌍 <world@example.com>, 🦆 Everywhere <ducks@example.com>, Иванов Иван Иванович <ivanov@example.com>, Jānis Bērziņš <janis@example.com>, Seán Ó Rudaí <sean@example.com>".to_string(),
-         ) );
+        ));
 
         assert_eq!(
             headers.to_string(),
             concat!(
-                "To: =?utf-8?b?8J+MjQ==?= <world@example.com>, =?utf-8?b?8J+mhg==?= \r\n",
-                " Everywhere <ducks@example.com>, =?utf-8?b?0JjQstCw0L3QvtCyIA==?=\r\n",
-                " =?utf-8?b?0JjQstCw0L0g0JjQstCw0L3QvtCy0LjRhw==?= <ivanov@example.com>, \r\n",
-                " =?utf-8?b?SsSBbmlzIELEk3J6acWGxaE=?= <janis@example.com>, \r\n",
-                " =?utf-8?b?U2XDoW4gw5MgUnVkYcOt?= <sean@example.com>\r\n"
+            "To: =?utf-8?b?8J+MjQ==?= <world@example.com>, =?utf-8?b?8J+mhg==?= \r\n",
+            " Everywhere <ducks@example.com>, =?utf-8?b?0JjQstCw0L3QvtCyIA==?=\r\n",
+            " =?utf-8?b?0JjQstCw0L0g0JjQstCw0L3QvtCy0LjRhw==?= <ivanov@example.com>, \r\n",
+            " =?utf-8?b?SsSBbmlzIELEk3J6acWGxaE=?= <janis@example.com>, \r\n",
+            " =?utf-8?b?U2XDoW4gw5MgUnVkYcOt?= <sean@example.com>\r\n"
             )
         );
     }
@@ -758,8 +762,8 @@ mod tests {
         let mut headers = Headers::new();
         headers.insert_raw(
             HeaderValue::new(
-            HeaderName::new_from_ascii_str("Subject"),
-            "🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳".to_string(),)
+                HeaderName::new_from_ascii_str("Subject"),
+                "🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳🥳".to_string(), )
         );
 
         assert_eq!(
@@ -787,14 +791,14 @@ mod tests {
         let mut headers = Headers::new();
         headers.insert_raw(
             HeaderValue::new(
-            HeaderName::new_from_ascii_str("Subject"),
-            "Hello! This is lettre, and this IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I guess that's it!".to_string()
+                HeaderName::new_from_ascii_str("Subject"),
+                "Hello! This is lettre, and this IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I guess that's it!".to_string(),
             )
         );
         headers.insert_raw(
             HeaderValue::new(
-            HeaderName::new_from_ascii_str("To"),
-            "🌍 <world@example.com>, 🦆 Everywhere <ducks@example.com>, Иванов Иван Иванович <ivanov@example.com>, Jānis Bērziņš <janis@example.com>, Seán Ó Rudaí <sean@example.com>".to_string(),
+                HeaderName::new_from_ascii_str("To"),
+                "🌍 <world@example.com>, 🦆 Everywhere <ducks@example.com>, Иванов Иван Иванович <ivanov@example.com>, Jānis Bērziņš <janis@example.com>, Seán Ó Rudaí <sean@example.com>".to_string(),
             )
         );
         headers.insert_raw(HeaderValue::new(
@@ -809,16 +813,16 @@ mod tests {
         assert_eq!(
             headers.to_string(),
             concat!(
-                "Subject: Hello! This is lettre, and this \r\n",
-                " IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I \r\n",
-                " guess that's it!\r\n",
-                "To: =?utf-8?b?8J+MjQ==?= <world@example.com>, =?utf-8?b?8J+mhg==?= \r\n",
-                " Everywhere <ducks@example.com>, =?utf-8?b?0JjQstCw0L3QvtCyIA==?=\r\n",
-                " =?utf-8?b?0JjQstCw0L0g0JjQstCw0L3QvtCy0LjRhw==?= <ivanov@example.com>, \r\n",
-                " =?utf-8?b?SsSBbmlzIELEk3J6acWGxaE=?= <janis@example.com>, \r\n",
-                " =?utf-8?b?U2XDoW4gw5MgUnVkYcOt?= <sean@example.com>\r\n",
-                "From: Someone <somewhere@example.com>\r\n",
-                "Content-Transfer-Encoding: quoted-printable\r\n",
+            "Subject: Hello! This is lettre, and this \r\n",
+            " IsAVeryLongLineDoYouKnowWhatsGoingToHappenIGuessWeAreGoingToFindOut. Ok I \r\n",
+            " guess that's it!\r\n",
+            "To: =?utf-8?b?8J+MjQ==?= <world@example.com>, =?utf-8?b?8J+mhg==?= \r\n",
+            " Everywhere <ducks@example.com>, =?utf-8?b?0JjQstCw0L3QvtCyIA==?=\r\n",
+            " =?utf-8?b?0JjQstCw0L0g0JjQstCw0L3QvtCy0LjRhw==?= <ivanov@example.com>, \r\n",
+            " =?utf-8?b?SsSBbmlzIELEk3J6acWGxaE=?= <janis@example.com>, \r\n",
+            " =?utf-8?b?U2XDoW4gw5MgUnVkYcOt?= <sean@example.com>\r\n",
+            "From: Someone <somewhere@example.com>\r\n",
+            "Content-Transfer-Encoding: quoted-printable\r\n",
             )
         );
     }
@@ -834,8 +838,8 @@ mod tests {
         assert_eq!(
             headers.to_string(),
             concat!(
-                "Subject: =?utf-8?b?77yL5Luu5ZCN?= :a;go; \r\n",
-                " =?utf-8?b?Ozs7OztzOzs7Ozs7Ozs7Ozs7Ozs7O2ZmZmVpbm1qZ2dnZ2dnZ2dn772G44Gj?=\r\n"
+            "Subject: =?utf-8?b?77yL5Luu5ZCN?= :a;go; \r\n",
+            " =?utf-8?b?Ozs7OztzOzs7Ozs7Ozs7Ozs7Ozs7O2ZmZmVpbm1qZ2dnZ2dnZ2dn772G44Gj?=\r\n"
             )
         );
     }
