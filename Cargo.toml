@@ -82,27 +82,28 @@ harness = false
 name = "transport_smtp"
 
 [features]
-default = ["smtp-transport", "pool", "native-tls", "hostname", "builder"]
+default = ["transport", "smtp-transport", "pool", "native-tls", "hostname", "builder"]
 builder = ["httpdate", "mime", "base64", "fastrand", "quoted_printable", "email-encoding"]
 mime03 = ["mime"]
 
 # transports
-file-transport = ["uuid"]
+transport = []
+file-transport = ["transport", "uuid"]
 file-transport-envelope = ["serde", "serde_json", "file-transport"]
-sendmail-transport = []
-smtp-transport = ["base64", "nom"]
+sendmail-transport = ["transport"]
+smtp-transport = ["transport", "base64", "nom"]
 
-pool = ["futures-util"]
+pool = ["transport", "futures-util"]
 
-rustls-tls = ["webpki-roots", "rustls", "rustls-pemfile"]
+rustls-tls = ["transport", "webpki-roots", "rustls", "rustls-pemfile"]
 
 # async
-async-std1 = ["async-std", "async-trait", "futures-io", "futures-util"]
+async-std1 = ["transport", "async-std", "async-trait", "futures-io", "futures-util"]
 #async-std1-native-tls = ["async-std1", "native-tls", "async-native-tls"]
-async-std1-rustls-tls = ["async-std1", "rustls-tls", "futures-rustls"]
-tokio1 = ["tokio1_crate", "async-trait", "futures-io", "futures-util"]
-tokio1-native-tls = ["tokio1", "native-tls", "tokio1_native_tls_crate"]
-tokio1-rustls-tls = ["tokio1", "rustls-tls", "tokio1_rustls"]
+async-std1-rustls-tls = ["transport", "async-std1", "rustls-tls", "futures-rustls"]
+tokio1 = ["transport", "tokio1_crate", "async-trait", "futures-io", "futures-util"]
+tokio1-native-tls = ["transport", "tokio1", "native-tls", "tokio1_native_tls_crate"]
+tokio1-rustls-tls = ["transport", "tokio1", "rustls-tls", "tokio1_rustls"]
 
 dkim = ["sha2", "rsa", "ed25519-dalek"]
 

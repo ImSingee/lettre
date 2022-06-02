@@ -173,6 +173,7 @@ mod executor;
 #[cfg(feature = "builder")]
 #[cfg_attr(docsrs, doc(cfg(feature = "builder")))]
 pub mod message;
+#[cfg(feature = "transport")]
 pub mod transport;
 
 use std::error::Error as StdError;
@@ -215,6 +216,7 @@ pub use crate::transport::sendmail::SendmailTransport;
 pub use crate::transport::smtp::AsyncSmtpTransport;
 #[cfg(feature = "smtp-transport")]
 pub use crate::transport::smtp::SmtpTransport;
+#[cfg(feature = "transport")]
 #[doc(inline)]
 pub use crate::transport::Transport;
 use crate::{address::Envelope, error::Error};
